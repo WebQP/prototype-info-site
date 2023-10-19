@@ -1,0 +1,51 @@
+<?php
+
+namespace Database\Seeders\Base;
+
+use App\Models\BaseBlogCategory;
+use App\Models\BaseNavigation;
+use App\Models\BasePage;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
+
+class BaseBlogCategorySeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $createDate = Carbon::now();
+        $list = [
+            [
+                'status' => 1,
+                'status_delete' => 0,
+                'slug' => 'news',
+                'name' => 'Новости',
+            ],
+        ];
+        foreach ($list as $item) {
+            $getItem = BaseBlogCategory::where('slug', $item['slug'])->first();
+            if (!isset($getItem->id)) {
+                $postPage = BaseBlogCategory::insertGetId(
+                    [
+                        'status' => $item['status'],
+                        'status_delete' => $item['status_delete'],
+                        'slug' => $item['slug'],
+                        'name' => $item['name'],
+                        'created_at' => $createDate,
+                        'updated_at' => $createDate,
+                    ]
+                );
+                BaseNavigation::insert([
+                    'status' => $item['status'],
+                    'slug' => $item['slug'],
+                    'page_id' => $postPage,
+                    'page_type' => 3,
+                    'created_at' => $createDate,
+                    'updated_at' => $createDate,
+                ]);
+            }
+        }
+    }
+}

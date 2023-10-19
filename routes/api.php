@@ -1,6 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Content\Blog\BlogCategoryController;
+use App\Http\Controllers\Content\Blog\BlogPostController;
+use App\Http\Controllers\Content\PageController;
+use App\Http\Controllers\UploadingFilesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +17,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('/upload-editor-image', [UploadingFilesController::class, 'uploadImageTiny']);
+Route::post('/upload-preview-image', [UploadingFilesController::class, 'uploadImagePreview']);
+
+Route::resource('page', PageController::class);
+
+Route::get('blog-category/list', [BlogCategoryController::class,'listCategory']);
+Route::resource('blog-category', BlogCategoryController::class);
+
+Route::resource('blog-post', BlogPostController::class);

@@ -2,6 +2,6 @@
     "/assets/site/js/app.js": "/assets/site/js/app.js",
     "/assets/admin/js/admin.js": "/assets/admin/js/admin.js",
     "/assets/admin/js/app.js": "/assets/admin/js/app.js",
-    "/assets/site/css/app.css": "/assets/site/css/app.css",
-    "/assets/admin/css/app.css": "/assets/admin/css/app.css"
+    "/assets/admin/css/app.css": "/assets/admin/css/app.css",
+    "/assets/site/css/app.css": "/assets/site/css/app.css"
 }

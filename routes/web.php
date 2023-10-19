@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UploadingFilesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('{any}', function () {
+
+
+Route::get('/manager/{any}', function () {
     return view('control-panel.app');
 })->where('any', '.*');
 

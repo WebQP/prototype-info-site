@@ -1,0 +1,211 @@
+body {
+    font-family: 'Rubik', sans-serif;
+}
+
+.page-name {
+    padding-top: 8px;
+    padding-bottom: 10px;
+    font-size: 18px;
+}
+
+.float-right {float: right;}
+.preview-image {
+    width: 100%;
+}
+.input-file {
+    float: right;
+    input {
+        display: none;
+    }
+    span {
+        color: #2271b1;
+        transition: 200ms;
+        transition-timing-function: ease-in-out;
+        border-bottom: 1px solid #2271b1;
+        cursor: pointer;
+        &:hover {
+            border-bottom: 1px solid #fff;
+        }
+    }
+}
+
+.block-preview-image {
+    display: block;
+    position: relative;
+    span {
+        color: #b71c1c;
+        transition: 200ms;
+        transition-timing-function: ease-in-out;
+        border-bottom: 1px solid #b71c1c;
+        cursor: pointer;
+        font-size: 12px;
+        display: inline-block;
+        &:hover {
+            border-bottom: 1px solid #fff;
+        }
+    }
+}
+
+.loader {
+    animation: rotate 1s infinite;
+    height: 100px;
+    width: 100px;
+    display: inline-block;
+}
+
+.loader:before,
+.loader:after {
+    border-radius: 50%;
+    content: "";
+    display: block;
+    height: 40px;
+    width: 40px;
+}
+.loader:before {
+    animation: ball1 1s infinite;
+    background-color: #fff;
+    box-shadow: 60px 0 0 #ff3d00;
+    margin-bottom: 20px;
+}
+.loader:after {
+    animation: ball2 1s infinite;
+    background-color: #ff3d00;
+    box-shadow: 60px 0 0 #fff;
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg) scale(0.8) }
+    50% { transform: rotate(360deg) scale(1.2) }
+    100% { transform: rotate(720deg) scale(0.8) }
+}
+
+@keyframes ball1 {
+    0% {
+        box-shadow: 60px 0 0 #ff3d00;
+    }
+    50% {
+        box-shadow: 0 0 0 #ff3d00;
+        margin-bottom: 0;
+        transform: translate(30px, 30px);
+    }
+    100% {
+        box-shadow: 60px 0 0 #ff3d00;
+        margin-bottom: 20px;
+    }
+}
+
+@keyframes ball2 {
+    0% {
+        box-shadow: 60px 0 0 #fff;
+    }
+    50% {
+        box-shadow: 0 0 0 #fff;
+        margin-top: -40px;
+        transform: translate(30px, 30px);
+    }
+    100% {
+        box-shadow: 60px 0 0 #fff;
+        margin-top: 0;
+    }
+}
+
+.alert-danger {
+    display: block;
+    background: #b71c1c;
+    width: 100%;
+    color: #fff;
+    padding: 15px 15px 15px 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.error-msg {
+    color: #d32f2f;
+    margin-top: 10px;
+}
+
+.img-lang {
+    border: 1px solid #ccc;
+    display: inline-block;
+    border-radius: 8px;
+    width: 30px;
+    height: 20px;
+}
+
+a {
+    color: #135e96;
+    text-decoration: none;
+}
+
+.table-list {
+    .name {
+        font-size: 16px;
+    }
+    .td-name {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        vertical-align: top;
+    }
+    .action-list {
+        a {
+            color: #135e96;
+            text-decoration: none;
+            font-size: 12px;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+        span {
+            font-size: 12px;
+            display: inline-block;
+            margin-left: 5px;
+            margin-right: 5px;
+            &.red {
+                color:#ef5350;
+                cursor: pointer;
+            }
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .dateUpdate {
+        font-size: 12px;
+    }
+}
+
+.search-list {
+    border: 1px solid #ccc !important;
+    border-radius: 4px 0 0 4px !important;
+}
+
+.search-btn {
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+
+.pagination {
+    margin: 0;
+    padding: 0;
+    display: block;
+    text-align: right;
+    .page-item {
+        display: inline-block;
+        margin-left: 5px;
+        button {
+            display: block;
+            line-height: 20px;
+            padding: 3px 10px 5px 10px;
+            border: 0;
+            border-radius: 8px;
+
+        }
+    }
+}
+
+.btn-add {
+    padding-top: 4px;
+    padding-bottom: 5px;
+}
