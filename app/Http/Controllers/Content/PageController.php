@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Content;
 
 use App\Http\Controllers\Controller;
-use App\Models\BaseNavigation;
-use App\Models\BasePage;
-use App\Models\BasePagesLocalisation;
-use App\Models\DataLocalisation;
+use App\Models\Base\BaseNavigation;
+use App\Models\Base\Pages\BasePage;
+use App\Models\Base\Pages\BasePageLocalisation;
+use App\Models\Data\DataLocalisation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -50,7 +50,7 @@ class PageController extends Controller
 
     private function languageVersionsPage(int $id)
     {
-        $languageVersionsPage = BasePagesLocalisation::where('page_id', $id)->get();
+        $languageVersionsPage = BasePageLocalisation::where('page_id', $id)->get();
         $languageVersions = [];
         $languagesData =  $this->languagesData();
         $languageVersions[] = [
@@ -126,7 +126,7 @@ class PageController extends Controller
         } else {
             $getLocale = DataLocalisation::where('prefix', trim($lang))->where('status', 1)->first();
             if (isset($getLocale->id)) {
-                $page = BasePagesLocalisation::where('page_id', $id)
+                $page = BasePageLocalisation::where('page_id', $id)
                     ->where('localisation_id', $getLocale->id)
                     ->first();
                 $pageMainLang = BasePage::find($id);
@@ -169,7 +169,7 @@ class PageController extends Controller
                 ->where('status', 1)
                 ->first();
             if (isset($getLocale->id)) {
-                $postPage = BasePagesLocalisation::where('page_id', $id)
+                $postPage = BasePageLocalisation::where('page_id', $id)
                     ->where('localisation_id', $getLocale->id)
                     ->first();
                 if (isset($postPage->id)) {
@@ -181,7 +181,7 @@ class PageController extends Controller
                     $postPage->preview_image = trim($request->pageImagePreview);
                     $postPage->save();
                 } else {
-                    $postPage = new BasePagesLocalisation();
+                    $postPage = new BasePageLocalisation();
                     $postPage->page_id = $id;
                     $postPage->localisation_id = $getLocale->id;
                     $postPage->status = $request->pageStatus;
@@ -202,7 +202,7 @@ class PageController extends Controller
     public function destroy(string $id)
     {
         BasePage::where('id', $id)->delete();
-        BasePagesLocalisation::where('page_id', $id)->delete();
+        BasePageLocalisation::where('page_id', $id)->delete();
         BaseNavigation::where('page_id', $id)->where('page_type', 1)->delete();
     }
 
