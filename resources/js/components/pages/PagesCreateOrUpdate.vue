@@ -37,7 +37,45 @@
                     <label for="description" class="form-label">Description</label>
                     <textarea v-model="pageDescription" class="form-control" rows="1" id="description" placeholder="Description"></textarea>
                 </div>
+
+                <div class="mt-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="form-label">Изображения для сайдера</label>
+                                </div>
+                                <div class="col-6">
+                                    <label class="input-file">
+                                        <input type="file" :id="name" ref="file" accept="image/*" v-on:change="imagePreviewUploads()">
+                                        <span>Добавить изображение</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                    <draggable
+                        :list="list"
+                        :disabled="!enabled"
+                        item-key="name"
+                        class="list-group"
+                        ghost-class="ghost"
+                        :move="checkMove"
+                        @start="dragging = true"
+                        @end="dragging = false"
+                    >
+                        <template #item="{ element }">
+                            <div class="list-group-item" :class="{ 'not-draggable': !enabled }">
+                                <img :src="element.url">
+                            </div>
+                        </template>
+                    </draggable>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+
+
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
@@ -103,9 +141,13 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 export default {
+    components: {
+        draggable,
+    },
     setup() {
         const v$ = useVuelidate()
         return { v$ }
@@ -134,6 +176,39 @@ export default {
             listLanguages: [],
             showPage: false,
             showError: false,
+
+            list: [
+                {
+                    "id": 1,
+                    "url": "http://med.local/new/images/slider/slide-0.jpg",
+                },
+                {
+                    "id": 2,
+                    "url": "http://med.local/new/images/slider/slide-1.jpg",
+                },
+                {
+                    "id": 3,
+                    "url": "http://med.local/new/images/slider/slide-0.jpg",
+                },
+                {
+                    "id": 4,
+                    "url": "http://med.local/new/images/slider/slide-1.jpg",
+                },
+                {
+                    "id": 5,
+                    "url": "http://med.local/new/images/slider/slide-0.jpg",
+                },
+                {
+                    "id": 6,
+                    "url": "http://med.local/new/images/slider/slide-1.jpg",
+                },
+                {
+                    "id": 7,
+                    "url": "http://med.local/new/images/slider/slide-0.jpg",
+                },
+            ],
+            dragging: false,
+            enabled: true,
         }
     },
     computed: {
@@ -142,7 +217,11 @@ export default {
         },
         lang() {
             return this.$route.params.lang
-        }
+        },
+            draggingInfo() {
+                return this.dragging ? "under drag" : "";
+            }
+
     },
     created() {
         if(this.id){
@@ -265,11 +344,31 @@ export default {
         },
         imagePreviewDelete(){
             this.pageImagePreview = '';
+        },
+        add: function() {
+            this.list.push({ name: "Juan " + id, id: id++ });
+        },
+        replace: function() {
+            this.list = [{ name: "Edgard", id: id++ }];
+        },
+        checkMove: function(e) {
+            window.console.log("Future index: " + e.draggedContext.futureIndex);
         }
     }
 }
 </script>
 
 <style scoped>
+.buttons {
+    margin-top: 35px;
+}
 
+.ghost {
+    opacity: 0.5;
+    background: #c8ebfb;
+}
+
+.not-draggable {
+    cursor: no-drop;
+}
 </style>
