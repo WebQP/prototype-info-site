@@ -2,7 +2,7 @@
 
 namespace Database\Seeders\Base;
 
-use App\Models\DataLocalisation;
+use App\Models\Data\DataLocalisation;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 
