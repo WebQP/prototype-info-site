@@ -2,9 +2,8 @@
 
 namespace Database\Seeders\Base;
 
-use App\Models\BaseBlogCategory;
-use App\Models\BaseNavigation;
-use App\Models\BasePage;
+use App\Models\Base\BaseNavigation;
+use App\Models\Base\Blog\BaseBlogCategory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 
