@@ -101,6 +101,26 @@ textarea {
   border-radius: 100% !important;
 }
 
+.list-group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  align-content: stretch;
+}
+.list-group .list-group-item {
+  width: 25%;
+  border-radius: 8px !important;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+.list-group .list-group-item img {
+  width: 100%;
+  border-radius: 8px !important;
+}
+
 body {
   font-family: "Rubik", sans-serif;
 }
