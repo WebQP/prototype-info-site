@@ -27,6 +27,7 @@
         "vue-router": "^4.2.5",
         "vue-tinymce-editor": "^1.6.2",
         "vue3-select2-component": "^0.1.7",
-        "vue3-treeselect": "^0.1.10"
+        "vue3-treeselect": "^0.1.10",
+        "vuedraggable": "^4.1.0"
     }
 }
