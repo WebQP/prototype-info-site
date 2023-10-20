@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('base_blog_category_localisations', function (Blueprint $table) {
+        Schema::create('base_blog_categories_localisations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('page_id')->default(0)->comment('ID страницы');
             $table->unsignedInteger('localisation_id')->default(0)->comment('ID локализации');
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('base_blog_category_localisations');
+        Schema::dropIfExists('base_blog_categories_localisations');
     }
 };
