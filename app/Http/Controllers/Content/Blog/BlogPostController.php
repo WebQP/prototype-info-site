@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Content\Blog;
 
 use App\Http\Controllers\Controller;
-use App\Models\BaseBlogCategory;
-use App\Models\BaseBlogCategoryPost;
-use App\Models\BaseBlogPost;
-use App\Models\BaseBlogPostLocalisation;
-use App\Models\BaseNavigation;
-use App\Models\BasePage;
-use App\Models\BasePagesLocalisation;
-use App\Models\DataLocalisation;
+use App\Models\Base\BaseNavigation;
+use App\Models\Base\Blog\BaseBlogCategoryPost;
+use App\Models\Base\Blog\BaseBlogPost;
+use App\Models\Base\Blog\BaseBlogPostLocalisation;
+use App\Models\Base\Pages\BasePageLocalisation;
+use App\Models\Data\DataLocalisation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -259,7 +257,7 @@ class BlogPostController extends Controller
     public function destroy(string $id)
     {
         BaseBlogPost::where('id', $id)->delete();
-        BasePagesLocalisation::where('page_id', $id)->delete();
+        BasePageLocalisation::where('page_id', $id)->delete();
         BaseNavigation::where('page_id', $id)->where('page_type', 1)->delete();
     }
 
