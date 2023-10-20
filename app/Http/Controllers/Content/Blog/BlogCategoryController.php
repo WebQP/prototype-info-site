@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\Content\Blog;
 
 use App\Http\Controllers\Controller;
-use App\Models\BaseBlogCategoryPost;
-use App\Models\BaseBlogCategory;
-use App\Models\BaseBlogCategoryLocalisation;
-use App\Models\BaseNavigation;
-use App\Models\BasePage;
-use App\Models\BasePagesLocalisation;
-use App\Models\DataLocalisation;
-use Carbon\Carbon;
+use App\Models\Base\BaseNavigation;
+use App\Models\Base\Blog\BaseBlogCategory;
+use App\Models\Base\Blog\BaseBlogCategoryLocalisation;
+use App\Models\Base\Blog\BaseBlogCategoryPost;
+use App\Models\Data\DataLocalisation;
 use Illuminate\Http\Request;
 
 class BlogCategoryController extends Controller
