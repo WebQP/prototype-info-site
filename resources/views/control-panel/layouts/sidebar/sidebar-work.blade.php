@@ -10,10 +10,28 @@
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="/manager/page">
+                <a class="sidebar-link" href="/manager/shop/products">
                     <i class="align-middle" data-feather="square"></i>
                     <span class="align-middle">
-                        Настройки
+                        Товары
+                    </span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/manager/shop/brands">
+                    <i class="align-middle" data-feather="square"></i>
+                    <span class="align-middle">
+                        Бренды
+                    </span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/manager/shop/categories">
+                    <i class="align-middle" data-feather="square"></i>
+                    <span class="align-middle">
+                        Категории
                     </span>
                 </a>
             </li>

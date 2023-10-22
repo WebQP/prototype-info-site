@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Content\Blog;
 
 use App\Http\Controllers\Controller;
 use App\Models\Base\BaseNavigation;
-use App\Models\Base\Blog\BaseBlogCategoryPost;
-use App\Models\Base\Blog\BaseBlogPost;
-use App\Models\Base\Blog\BaseBlogPostLocalisation;
+use App\Models\Base\Blog\Categories\BaseBlogCategoryPost;
+use App\Models\Base\Blog\Posts\BaseBlogPost;
+use App\Models\Base\Blog\Posts\BaseBlogPostLocalisation;
 use App\Models\Base\Pages\BasePageLocalisation;
 use App\Models\Data\DataLocalisation;
 use Carbon\Carbon;

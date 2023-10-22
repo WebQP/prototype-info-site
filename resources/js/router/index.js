@@ -1,11 +1,22 @@
 import {createWebHistory, createRouter} from "vue-router";
 
+//Страницы
 import PagesList from "../components/pages/PagesList.vue";
 import PagesCreateOrUpdate from "../components/pages/PagesCreateOrUpdate.vue";
+
+//Блог
 import BlogCategoriesList from "../components/blog/categories/BlogCategoriesList.vue";
 import BlogCategoriesCreateOrUpdate from "../components/blog/categories/BlogCategoriesCreateOrUpdate.vue";
 import BlogPostsList from "../components/blog/posts/BlogPostsList.vue";
 import BlogPostsCreateOrUpdate from "../components/blog/posts/BlogPostsCreateOrUpdate.vue";
+
+//Магазин
+import ShopCategoriesList from "../components/shop/categories/ShopCategoriesList.vue";
+import ShopCategoriesCreateOrUpdate from "../components/shop/categories/ShopCategoriesCreateOrUpdate.vue";
+import ShopProductsList from "../components/shop/products/ShopProductsList.vue";
+import ShopProductsCreateOrUpdate from "../components/shop/products/ShopProductsCreateOrUpdate.vue";
+import ShopBrandsList from "../components/shop/brands/ShopBrandsList.vue";
+import ShopBrandsCreateOrUpdate from "../components/shop/brands/ShopBrandsCreateOrUpdate.vue";
 
 export const routes = [
     //Страницы
@@ -124,6 +135,123 @@ export const routes = [
         },
     },
     //Блог записи
+
+    //Магазин категории
+    {
+        name: 'shop-categories-list',
+        path: '/manager/shop/categories',
+        component: ShopCategoriesList,
+        meta: {
+            title: 'Категории магазина',
+            namePage: 'Категории магазина'
+        },
+    },
+    {
+        name: 'shop-categories-create',
+        path: '/manager/shop/categories/create',
+        component: ShopCategoriesCreateOrUpdate,
+        meta: {
+            title: 'Добавить категорию',
+            namePage: 'Добавить категорию'
+        },
+    },
+    {
+        name: 'shop-categories-edit',
+        path: '/manager/shop/categories/:id',
+        component: ShopCategoriesCreateOrUpdate,
+        meta: {
+            title: 'Редактировать категорию',
+            namePage: 'Редактировать категорию'
+        },
+    },
+    {
+        name: 'shop-categories-edit-lang',
+        path: '/manager/shop/categories/:id/:lang',
+        component: ShopCategoriesCreateOrUpdate,
+        meta: {
+            title: 'Редактировать категорию',
+            namePage: 'Редактировать категорию'
+        },
+    },
+    //Магазин категории
+
+    //Магазин бренды
+    {
+        name: 'shop-brand-list',
+        path: '/manager/shop/brands',
+        component: ShopBrandsList,
+        meta: {
+            title: 'Список брендов',
+            namePage: 'Список брендов'
+        },
+    },
+    {
+        name: 'shop-brand-create',
+        path: '/manager/shop/brands/create',
+        component: ShopBrandsCreateOrUpdate,
+        meta: {
+            title: 'Добавить бренд',
+            namePage: 'Добавить бренд'
+        },
+    },
+    {
+        name: 'shop-brand-edit',
+        path: '/manager/shop/brands/:id',
+        component: ShopBrandsCreateOrUpdate,
+        meta: {
+            title: 'Редактировать бренд',
+            namePage: 'Редактировать бренд'
+        },
+    },
+    {
+        name: 'shop-brand-edit-lang',
+        path: '/manager/shop/brands/:id/:lang',
+        component: ShopBrandsCreateOrUpdate,
+        meta: {
+            title: 'Редактировать бренд',
+            namePage: 'Редактировать бренд'
+        },
+    },
+    //Магазин бренды
+
+    //Магазин товары
+    {
+        name: 'shop-product-list',
+        path: '/manager/shop/products',
+        component: ShopProductsList,
+        meta: {
+            title: 'Список товаров',
+            namePage: 'Список товаров'
+        },
+    },
+    {
+        name: 'shop-product-create',
+        path: '/manager/shop/products/create',
+        component: ShopProductsCreateOrUpdate,
+        meta: {
+            title: 'Добавить товар',
+            namePage: 'Добавить товар'
+        },
+    },
+    {
+        name: 'shop-product-edit',
+        path: '/manager/shop/products/:id',
+        component: ShopProductsCreateOrUpdate,
+        meta: {
+            title: 'Редактировать товар',
+            namePage: 'Редактировать товар'
+        },
+    },
+    {
+        name: 'shop-product-edit-lang',
+        path: '/manager/shop/products/:id/:lang',
+        component: ShopProductsCreateOrUpdate,
+        meta: {
+            title: 'Редактировать товар',
+            namePage: 'Редактировать товар'
+        },
+    },
+    //Магазин товары
 
     ];
 

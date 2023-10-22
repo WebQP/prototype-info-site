@@ -6,15 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\Base\BaseNavigation;
 use App\Models\Base\Pages\BasePage;
 use App\Models\Base\Pages\BasePageLocalisation;
+use App\Models\Base\Pages\BasePageMainSlider;
 use App\Models\Data\DataLocalisation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->pageType = 1; //Тип страницы в навигации
+    }
+
+    //Список для листинга
     public function index()
     {
         $getPagesList = BasePage::orderBy('id')->get();
@@ -48,52 +52,7 @@ class PageController extends Controller
         ];
     }
 
-    private function languageVersionsPage(int $id)
-    {
-        $languageVersionsPage = BasePageLocalisation::where('page_id', $id)->get();
-        $languageVersions = [];
-        $languagesData =  $this->languagesData();
-        $languageVersions[] = [
-            'name' => $languagesData['langMain']['name'],
-            'prefix' => $languagesData['langMain']['prefix'],
-            'previewImage' => $languagesData['langMain']['previewImage'],
-        ];
-        if (count($languageVersionsPage) > 0) {
-            foreach ($languageVersionsPage as $item) {
-                $langData = $this->langDataID($item->localisation_id);
-                $languageVersions[] = [
-                    'name' => $langData['name'],
-                    'prefix' => $langData['prefix'],
-                    'previewImage' => $langData['previewImage'],
-                ];
-            }
-        }
-        return $languageVersions;
-    }
-
-    public function langDataID(string $langID): array
-    {
-        $getLocale = DataLocalisation::where('id', trim($langID))->first();
-        if (isset($getLocale->id)) {
-            return [
-                'id' => $getLocale->id,
-                'status' => $getLocale->status,
-                'name' => $getLocale->name,
-                'prefix' => $getLocale->prefix,
-                'previewImage' => $getLocale->preview_image,
-                'main' => $getLocale->main,
-            ];
-        }
-        return [
-            'id' => 0,
-            'status' => 0,
-            'name' => 'No Language',
-            'prefix' => 'no',
-            'previewImage' => '',
-            'main' => 0,
-        ];
-    }
-
+    //Добавление записи
     public function store(Request $request)
     {
         $slug = $this->generationUrl($request->pageName);
@@ -108,16 +67,35 @@ class PageController extends Controller
         $postPage->preview_image = trim($request->pageImagePreview);
         $postPage->save();
 
-        $this->createNavigation($slug, $postPage->id, 1, $request->pageStatus);
+        $this->addNavigation($slug, $postPage->id, $this->pageType, $request->pageStatus);
 
         return ['id' => $postPage->id];
     }
 
-    public function show(string $id)
+    //Получаем данные записи
+    public function show(string $id): array
     {
-        //
+        $listSlider = [];
+        $page = BasePage::find($id);
+
+        if ($id == 1) {
+            $getMainSlider = BasePageMainSlider::get();
+            foreach ($getMainSlider as $item) {
+                $listSlider[] = $item->url;
+            }
+        }
+        return [
+            'id' => $page->id,
+            'name' =>  $page->name,
+            'title' =>  $page->title,
+            'description' =>  $page->description,
+            'contents' => $page->contents,
+            'previewImage' => $page->preview_image,
+            'listSlider' => $listSlider,
+        ];
     }
 
+    //Получаем данные для редактирования записи
     public function edit(int $id, Request $request)
     {
         $lang = $request->lang;
@@ -134,6 +112,17 @@ class PageController extends Controller
         }
 
         $languages = $this->languagesData();
+        $listSlider = [];
+
+        if ($id == 1) {
+            $getListSlider = BasePageMainSlider::get();
+            foreach ($getListSlider as $item) {
+                $listSlider[] = [
+                    'id' => $item->id,
+                    'url' => $item->url,
+                ];
+            }
+        }
 
         return [
             'id' => $page->id ?? $pageMainLang->id,
@@ -147,10 +136,11 @@ class PageController extends Controller
             'previewImage' => $page->preview_image ?? '',
             'lang' => $lang == '' ? $lang : $languages['langMain']['prefix'],
             'listLanguages' => $languages,
+            'listSlider' => $listSlider,
         ];
     }
 
-
+    //Обновляем запись
     public function update(Request $request, string $id)
     {
         $lang = $request->pageLang;
@@ -195,18 +185,77 @@ class PageController extends Controller
             }
         }
 
+        if ($id == 1) {
+            BasePageMainSlider::truncate();
+            if (isset($request->pageListSlider)) {
+                foreach ($request->pageListSlider as $item) {
+                    BasePageMainSlider::insert(['url' => $item['url']]);
+                }
+            }
+        }
+
+
         return ['id' => $id];
     }
 
-
+    //Удаляем запись и связанные данные
     public function destroy(string $id)
     {
         BasePage::where('id', $id)->delete();
         BasePageLocalisation::where('page_id', $id)->delete();
-        BaseNavigation::where('page_id', $id)->where('page_type', 1)->delete();
+        BaseNavigation::where('page_id', $id)->where('page_type', $this->pageType)->delete();
     }
 
-    public function languagesData(string $lang = ''): array
+    //Получаем наличий локализации страницы
+    private function languageVersionsPage(int $id)
+    {
+        $languageVersionsPage = BasePageLocalisation::where('page_id', $id)->get();
+        $languageVersions = [];
+        $languagesData =  $this->languagesData();
+        $languageVersions[] = [
+            'name' => $languagesData['langMain']['name'],
+            'prefix' => $languagesData['langMain']['prefix'],
+            'previewImage' => $languagesData['langMain']['previewImage'],
+        ];
+        if (count($languageVersionsPage) > 0) {
+            foreach ($languageVersionsPage as $item) {
+                $langData = $this->langDataID($item->localisation_id);
+                $languageVersions[] = [
+                    'name' => $langData['name'],
+                    'prefix' => $langData['prefix'],
+                    'previewImage' => $langData['previewImage'],
+                ];
+            }
+        }
+        return $languageVersions;
+    }
+
+    //Получаем данные языка по ID
+    private function langDataID(string $langID): array
+    {
+        $getLocale = DataLocalisation::where('id', trim($langID))->first();
+        if (isset($getLocale->id)) {
+            return [
+                'id' => $getLocale->id,
+                'status' => $getLocale->status,
+                'name' => $getLocale->name,
+                'prefix' => $getLocale->prefix,
+                'previewImage' => $getLocale->preview_image,
+                'main' => $getLocale->main,
+            ];
+        }
+        return [
+            'id' => 0,
+            'status' => 0,
+            'name' => 'No Language',
+            'prefix' => 'no',
+            'previewImage' => '',
+            'main' => 0,
+        ];
+    }
+
+    //Раскладываем языки
+    private function languagesData(string $lang = ''): array
     {
         $getLocaleList = DataLocalisation::where('status', 1)->get();
 
@@ -252,7 +301,8 @@ class PageController extends Controller
         ];
     }
 
-    public function createNavigation(string $slug, int $pageId, int $pageType, int $pageStatus = 1): void
+    //Добавляем запись в навигацию
+    private function addNavigation(string $slug, int $pageId, int $pageType, int $pageStatus = 1): void
     {
         $post = new BaseNavigation();
         $post->status = $pageStatus;
@@ -262,7 +312,8 @@ class PageController extends Controller
         $post->save();
     }
 
-    public function generationUrl(string $name): string
+    //Генерируем уникальный URL для страницы
+    private function generationUrl(string $name): string
     {
         $converter = [
             'а' => 'a', 'б' => 'b', 'в' => 'v', 'г' => 'g', 'д' => 'd',

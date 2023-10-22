@@ -4,17 +4,22 @@ namespace App\Http\Controllers\Content\Blog;
 
 use App\Http\Controllers\Controller;
 use App\Models\Base\BaseNavigation;
-use App\Models\Base\Blog\BaseBlogCategory;
-use App\Models\Base\Blog\BaseBlogCategoryLocalisation;
-use App\Models\Base\Blog\BaseBlogCategoryPost;
+use App\Models\Base\Blog\Categories\BaseBlogCategory;
+use App\Models\Base\Blog\Categories\BaseBlogCategoryLocalisation;
+use App\Models\Base\Blog\Categories\BaseBlogCategoryPost;
+use App\Models\Base\Shop\BaseShopCategory;
+use App\Models\Base\Shop\BaseShopCategoryLocalisation;
 use App\Models\Data\DataLocalisation;
 use Illuminate\Http\Request;
 
 class BlogCategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->pageType = 2; //Тип страницы в навигации
+    }
+
+    //Список для листинга
     public function index()
     {
         return [
@@ -23,52 +28,29 @@ class BlogCategoryController extends Controller
         ];
     }
 
-    private function languageVersionsPage(int $id)
+    //Получаем список категорий для связывания
+    public function listCategory()
     {
-        $languageVersionsPage = BaseBlogCategoryLocalisation::where('page_id', $id)->get();
-        $languageVersions = [];
-        $languagesData =  $this->languagesData();
-        $languageVersions[] = [
-            'name' => $languagesData['langMain']['name'],
-            'prefix' => $languagesData['langMain']['prefix'],
-            'previewImage' => $languagesData['langMain']['previewImage'],
-        ];
-        if (count($languageVersionsPage) > 0) {
-            foreach ($languageVersionsPage as $item) {
-                $langData = $this->langDataID($item->localisation_id);
-                $languageVersions[] = [
-                    'name' => $langData['name'],
-                    'prefix' => $langData['prefix'],
-                    'previewImage' => $langData['previewImage'],
-                ];
-            }
-        }
-        return $languageVersions;
-    }
-
-    public function langDataID(string $langID): array
-    {
-        $getLocale = DataLocalisation::where('id', trim($langID))->first();
-        if (isset($getLocale->id)) {
-            return [
-                'id' => $getLocale->id,
-                'status' => $getLocale->status,
-                'name' => $getLocale->name,
-                'prefix' => $getLocale->prefix,
-                'previewImage' => $getLocale->preview_image,
-                'main' => $getLocale->main,
+        $categoriseParentsList = BaseBlogCategory::where('parent_id', 0)
+            ->where('status', 1)
+            ->orderBy('id', 'ASC')
+            ->get();
+        $listCategories = [];
+        $level = 0;
+        foreach ($categoriseParentsList as $item) {
+            $listCategories[] = [
+                'id' => $item->id,
+                'slug' => '/' . $item->slug,
+                'name' => $item->name,
+                'level' => 0,
+                'languages' => $this->languageVersionsPage($item->id),
+                'children' => $this->listCategoryChildren($item->id, $level),
             ];
         }
-        return [
-            'id' => 0,
-            'status' => 0,
-            'name' => 'No Language',
-            'prefix' => 'no',
-            'previewImage' => '',
-            'main' => 0,
-        ];
+        return $listCategories;
     }
 
+    //Добавление записи
     public function store(Request $request)
     {
         $slug = $this->generationUrl($request->pageName);
@@ -84,16 +66,18 @@ class BlogCategoryController extends Controller
         $postPage->preview_image = trim($request->pageImagePreview);
         $postPage->save();
 
-        $this->createNavigation($slug, $postPage->id, 3, $request->pageStatus);
+        $this->addNavigation($slug, $postPage->id, $this->pageType, $request->pageStatus);
 
         return ['id' => $postPage->id];
     }
 
+    //Получаем данные записи
     public function show(string $id)
     {
         //
     }
 
+    //Получаем данные для редактирования записи
     public function edit(int $id, Request $request)
     {
         $lang = $request->lang;
@@ -104,7 +88,7 @@ class BlogCategoryController extends Controller
                 ->where('status', 1)
                 ->first();
             if (isset($getLocale->id)) {
-                $page = BaseBlogCategoryLocalisation::where('page_id', $id)
+                $page = BaseShopCategoryLocalisation::where('page_id', $id)
                     ->where('localisation_id', $getLocale->id)
                     ->first();
                 $pageMain = BaseBlogCategory::find($id);
@@ -130,7 +114,7 @@ class BlogCategoryController extends Controller
         ];
     }
 
-
+    //Обновляем запись
     public function update(Request $request, string $id)
     {
         $lang = $request->pageLang;
@@ -176,31 +160,19 @@ class BlogCategoryController extends Controller
         return ['id' => $id];
     }
 
-    public function listCategory()
+    //Удаляем запись и связанные данные
+    public function destroy(string $id)
     {
-        $categoriseParentsList = BaseBlogCategory::where('parent_id', 0)
-            ->where('status', 1)
-            ->orderBy('id', 'ASC')
-            ->get();
-        $listCategories = [];
-        $level = 0;
-        foreach ($categoriseParentsList as $item) {
-            $listCategories[] = [
-                'id' => $item->id,
-                'slug' => '/' . $item->slug,
-                'name' => $item->name,
-                'status_delete' => $item->status_delete,
-                'level' => 0,
-                'languages' => $this->languageVersionsPage($item->id),
-                'children' => $this->listCategoryChildren($item->id, $level),
-            ];
-        }
-        return $listCategories;
+        BaseBlogCategory::where('id', $id)->delete();
+        BaseBlogCategoryLocalisation::where('page_id', $id)->delete();
+        BaseBlogCategoryPost::where('category_id', $id)->delete();
+        BaseNavigation::where('page_id', $id)->where('page_type', $this->pageType)->delete();
     }
 
+    //Получаем список подкатегорий родительской категории
     public function listCategoryChildren($id, $level)
     {
-        $getCategoriseParents = BaseBlogCategory::where('parent_id', $id)
+        $getCategoriseParents = BaseShopCategory::where('parent_id', $id)
             ->where('status', 1)
             ->orderBy('id', 'ASC')
             ->get();
@@ -211,7 +183,6 @@ class BlogCategoryController extends Controller
                 'id' => $item->id,
                 'slug' => '/' . $item->slug,
                 'name' => $item->name,
-                'status_delete' => $item->status_delete,
                 'level' => $level,
                 'languages' => $this->languageVersionsPage($item->id),
                 'children' => $this->listCategoryChildren($item->id, $level),
@@ -220,15 +191,55 @@ class BlogCategoryController extends Controller
         return $listCategories;
     }
 
-
-    public function destroy(string $id)
+    //Получаем наличий локализации страницы
+    private function languageVersionsPage(int $id)
     {
-        BaseBlogCategory::where('id', $id)->delete();
-        BaseBlogCategoryLocalisation::where('page_id', $id)->delete();
-        BaseNavigation::where('page_id', $id)->where('page_type', 3)->delete();
-        BaseBlogCategoryPost::where('category_id', $id)->delete();
+        $languageVersionsPage = BaseBlogCategoryLocalisation::where('page_id', $id)->get();
+        $languageVersions = [];
+        $languagesData =  $this->languagesData();
+        $languageVersions[] = [
+            'name' => $languagesData['langMain']['name'],
+            'prefix' => $languagesData['langMain']['prefix'],
+            'previewImage' => $languagesData['langMain']['previewImage'],
+        ];
+        if (count($languageVersionsPage) > 0) {
+            foreach ($languageVersionsPage as $item) {
+                $langData = $this->langDataID($item->localisation_id);
+                $languageVersions[] = [
+                    'name' => $langData['name'],
+                    'prefix' => $langData['prefix'],
+                    'previewImage' => $langData['previewImage'],
+                ];
+            }
+        }
+        return $languageVersions;
     }
 
+    //Получаем данные языка по ID
+    public function langDataID(string $langID): array
+    {
+        $getLocale = DataLocalisation::where('id', trim($langID))->first();
+        if (isset($getLocale->id)) {
+            return [
+                'id' => $getLocale->id,
+                'status' => $getLocale->status,
+                'name' => $getLocale->name,
+                'prefix' => $getLocale->prefix,
+                'previewImage' => $getLocale->preview_image,
+                'main' => $getLocale->main,
+            ];
+        }
+        return [
+            'id' => 0,
+            'status' => 0,
+            'name' => 'No Language',
+            'prefix' => 'no',
+            'previewImage' => '',
+            'main' => 0,
+        ];
+    }
+
+    //Раскладываем языки
     public function languagesData(string $lang = ''): array
     {
         $getLocaleList = DataLocalisation::where('status', 1)->get();
@@ -275,7 +286,8 @@ class BlogCategoryController extends Controller
         ];
     }
 
-    public function createNavigation(string $slug, int $pageId, int $pageType, int $pageStatus = 1): void
+    //Добавляем запись в навигацию
+    public function addNavigation(string $slug, int $pageId, int $pageType, int $pageStatus = 1): void
     {
         $post = new BaseNavigation();
         $post->status = $pageStatus;
@@ -285,6 +297,7 @@ class BlogCategoryController extends Controller
         $post->save();
     }
 
+    //Генерируем уникальный URL для страницы
     public function generationUrl(string $name): string
     {
         $converter = [

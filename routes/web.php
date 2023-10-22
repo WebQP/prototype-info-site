@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\UploadingFilesController;
+use App\Http\Controllers\BaseNavigationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +20,5 @@ Route::get('/manager/{any}', function () {
     return view('control-panel.app');
 })->where('any', '.*');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [BaseNavigationController::class, 'index']);
+Route::get('/{slag}', [BaseNavigationController::class, 'route']);

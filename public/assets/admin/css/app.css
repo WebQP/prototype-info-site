@@ -115,10 +115,35 @@ textarea {
   background: #fff;
   border: 1px solid #ccc;
   padding: 5px;
+  position: relative;
+}
+.list-group .list-group-item:hover {
+  cursor: grab;
 }
 .list-group .list-group-item img {
   width: 100%;
   border-radius: 8px !important;
+  aspect-ratio: 1/0.6;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.list-group .list-group-item button {
+  width: 37px;
+  height: 37px;
+  position: absolute;
+  display: inline-block;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px 0 8px 0;
+  bottom: 5px;
+  right: 5px;
+  font-size: 24px;
+}
+.list-group .list-group-item button:hover {
+  background: #b71c1c;
+  border: 1px solid #b71c1c;
+  border-radius: 8px 0 8px 0;
+  color: #fff;
 }
 
 body {

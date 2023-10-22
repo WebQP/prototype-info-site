@@ -1,0 +1,25 @@
+.mt-25 {
+    margin-top: 25px;
+}
+
+.contact-icon {
+    display: inline-block;
+    width: 20px;
+}
+
+#logo {
+    max-width: 220px;
+}
+
+.callus-text a {
+    color:#fff !important;
+}
+
+.callus-text a:hover {
+    color:#fff !important;
+    text-decoration: underline !important;
+}
+
+.callus-text:hover {
+    color:#fff !important;
+}

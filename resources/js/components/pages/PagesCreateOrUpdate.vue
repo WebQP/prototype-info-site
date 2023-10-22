@@ -38,23 +38,23 @@
                     <textarea v-model="pageDescription" class="form-control" rows="1" id="description" placeholder="Description"></textarea>
                 </div>
 
-                <div class="mt-3">
+                <div v-if="id && id==='1'" class="mt-3">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-6">
-                                    <label class="form-label">Изображения для сайдера</label>
+                                    <label class="form-label">Изображения для слайдера</label>
                                 </div>
                                 <div class="col-6">
                                     <label class="input-file">
-                                        <input type="file" :id="name" ref="file" accept="image/*" v-on:change="imagePreviewUploads()">
+                                        <input type="file" :id="name" ref="fileSlider" accept="image/*" v-on:change="imageSliderUploads()">
                                         <span>Добавить изображение</span>
                                     </label>
                                 </div>
                             </div>
 
                     <draggable
-                        :list="list"
+                        :list="pageListSlider"
                         :disabled="!enabled"
                         item-key="name"
                         class="list-group"
@@ -66,6 +66,7 @@
                         <template #item="{ element }">
                             <div class="list-group-item" :class="{ 'not-draggable': !enabled }">
                                 <img :src="element.url">
+                                <button @click="imageSliderDelete(element.id)"><i class="fa-light fa-trash-can"></i></button>
                             </div>
                         </template>
                     </draggable>
@@ -177,36 +178,7 @@ export default {
             showPage: false,
             showError: false,
 
-            list: [
-                {
-                    "id": 1,
-                    "url": "http://med.local/new/images/slider/slide-0.jpg",
-                },
-                {
-                    "id": 2,
-                    "url": "http://med.local/new/images/slider/slide-1.jpg",
-                },
-                {
-                    "id": 3,
-                    "url": "http://med.local/new/images/slider/slide-0.jpg",
-                },
-                {
-                    "id": 4,
-                    "url": "http://med.local/new/images/slider/slide-1.jpg",
-                },
-                {
-                    "id": 5,
-                    "url": "http://med.local/new/images/slider/slide-0.jpg",
-                },
-                {
-                    "id": 6,
-                    "url": "http://med.local/new/images/slider/slide-1.jpg",
-                },
-                {
-                    "id": 7,
-                    "url": "http://med.local/new/images/slider/slide-0.jpg",
-                },
-            ],
+            pageListSlider: [],
             dragging: false,
             enabled: true,
         }
@@ -263,6 +235,7 @@ export default {
                 pageTitle: this.pageTitle,
                 pageDescription: this.pageDescription,
                 pageImagePreview: this.pageImagePreview,
+                pageListSlider: this.pageListSlider,
                 '_method': method,
             }).then(response => {
                 if(response.status === 200){
@@ -279,6 +252,7 @@ export default {
                 console.log(error);
             });
         },
+
         getPageData() {
             let apiUrl = '/api/page/'+ this.id +'/edit';
             if(this.pageLang !== ''){
@@ -300,6 +274,7 @@ export default {
                         this.listLanguages=response.data.listLanguages;
                         this.pageLang = this.pageLang === '' ? response.data.listLanguages.langMain.prefix : this.pageLang;
                         this.pageLangSelect = this.pageLangSelect === '' ? response.data.listLanguages.langMain.prefix : this.pageLang;
+                        this.pageListSlider = response.data.listSlider;
                         setTimeout(()=>{this.showPage = true;},1000);
                     }
                 })
@@ -323,6 +298,33 @@ export default {
            }
         },
 
+        imageSliderUploads() {
+            const formData = new FormData();
+            formData.append('file', this.$refs.fileSlider.files[0]);
+            formData.append('folder', 'slider');
+            axios
+                .post('/api/upload-slider-image', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+                .then(response => {
+                    if (response.status === 200) {
+                        this.pageListSlider.push({'id':0,'url':response.data})
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        },
+
+        imageSliderDelete(id) {
+            const index = this.pageListSlider.findIndex(item => item.id === id);
+            if (index !== -1) {
+                this.pageListSlider.splice(index, 1);
+            }
+        },
+
         imagePreviewUploads() {
             const formData = new FormData();
             formData.append('file', this.$refs.file.files[0]);
@@ -342,6 +344,7 @@ export default {
                     console.error(error);
                 });
         },
+
         imagePreviewDelete(){
             this.pageImagePreview = '';
         },

@@ -252,6 +252,9 @@ export default {
             this.calculateTotalPages();
         },
     },
+    mounted () {
+        document.title = this.$route.meta.title;
+    },
     methods: {
         getPageData() {
             let apiUrl = '/api/page';
