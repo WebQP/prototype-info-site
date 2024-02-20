@@ -37,43 +37,6 @@
                     <label for="description" class="form-label">Description</label>
                     <textarea v-model="pageDescription" class="form-control" rows="1" id="description" placeholder="Description"></textarea>
                 </div>
-
-                <div v-if="id && id==='1'" class="mt-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-6">
-                                    <label class="form-label">Изображения для слайдера</label>
-                                </div>
-                                <div class="col-6">
-                                    <label class="input-file">
-                                        <input type="file" :id="name" ref="fileSlider" accept="image/*" v-on:change="imageSliderUploads()">
-                                        <span>Добавить изображение</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <draggable
-                                :list="pageListSlider"
-                                :disabled="!enabled"
-                                item-key="name"
-                                class="list-group"
-                                ghost-class="ghost"
-                                :move="checkMove"
-                                @start="dragging = true"
-                                @end="dragging = false"
-                            >
-                                <template #item="{ element }">
-                                    <div class="list-group-item" :class="{ 'not-draggable': !enabled }">
-                                        <img :src="element.url">
-                                        <button @click="imageSliderDelete(element.id)"><i class="fa-light fa-trash-can"></i></button>
-                                    </div>
-                                </template>
-                            </draggable>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
 
@@ -123,7 +86,7 @@
                     <div class="card-body">
                         <label class="form-label mb-0">Изображение страницы</label>
                         <label class="input-file">
-                            <input type="file" :id="name" ref="fileSlide" accept="image/*" v-on:change="imagePreviewUploads()">
+                            <input type="file" :id="name" ref="file" accept="image/*" v-on:change="imagePreviewUploads()">
                             <span>Установить</span>
                         </label>
                         <div v-if="pageImagePreview" class="block-preview-image">

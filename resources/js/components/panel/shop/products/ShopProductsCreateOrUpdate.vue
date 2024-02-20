@@ -99,6 +99,28 @@
                                 </select>
                             </div>
                         </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="row align-items-center">
+                            <div class="col-9">
+                                <label for="specials" class="form-label m-0">Специальное предложение</label>
+                            </div>
+                            <div class="col-3">
+                                <input class="form-check-input" type="checkbox" v-model="pageSpecials" id="specials">
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-9">
+                                <label for="recommended" class="form-label m-0">Рекомендуемый</label>
+                            </div>
+                            <div class="col-3">
+                                <input class="form-check-input" type="checkbox" v-model="pageRecommended" id="recommended">
+                            </div>
+                        </div>
+
+
                     </div>
 
                 </div>
@@ -260,6 +282,8 @@ export default {
             pagePrice: 0,           //Цена товара
             pagePriceOld: 0,        //Старая цена товара
             pageBrandId: 1,         //ID производителя
+            pageSpecials: 0,        //Специальное предложение
+            pageRecommended: 0,      //Рекомендуемый товар
             pageCategories: [],     //Категории товара
 
 
@@ -331,6 +355,8 @@ export default {
                 pagePrice: this.pagePrice,                  //Цена товара
                 pagePriceOld: this.pagePriceOld,            //Старая цена товара
                 pageBrandId: this.pageBrandId,              //ID производителя
+                pageSpecials: this.pageSpecials,        //Специальное предложение
+                pageRecommended: this.pageRecommended,     //Рекомендуемый товар
                 pageProductCode: this.pageProductCode,      //Артикул
                 pageImageList: this.pageImageList,          //Фото товаров
                 '_method': method,
@@ -372,6 +398,8 @@ export default {
                         this.pagePrice=response.data.pagePrice;
                         this.pagePriceOld=response.data.pagePriceOld;
                         this.pageBrandId=response.data.pageBrandId;
+                        this.pageSpecials=response.data.pageSpecials;
+                        this.pageRecommended=response.data.pageRecommended;
                         this.pageCategories=response.data.pageCategories;
                         this.listLanguages=response.data.listLanguages;
                         this.pageLang = this.pageLang === '' ? response.data.listLanguages.langMain.prefix : this.pageLang;
