@@ -83,7 +83,8 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'ru',
+    'locales' => ['en'],
 
     /*
     |--------------------------------------------------------------------------
@@ -168,6 +169,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Services\Localization\LocalizationServiceProvider::class,
+        App\Providers\NavigationServiceProvider::class,
+        App\Providers\MetaSeoServiceProvider::class,
+        App\Providers\MetaContentServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -183,6 +188,9 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'LocalizationService' => App\Services\Localization\LocalizationService::class,
+        'MetaSeo' => App\Services\MetaSeoService::class,
+        'MetaContent' => App\Services\MetaContentService::class,
     ])->toArray(),
 
 ];

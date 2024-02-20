@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Content\Shop;
 
+use App\Facades\MetaContentFacade as MetaContent;
+use App\Facades\MetaSeoFacade as MetaSeo;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\DataOtherController;
+use App\Http\Controllers\MetaController;
 use App\Models\Base\BaseNavigation;
 use App\Models\Base\Shop\BaseShopCategory;
 use App\Models\Base\Shop\BaseShopCategoryLocalisation;
 use App\Models\Base\Shop\BaseShopCategoryProduct;
+use App\Models\Base\Shop\BaseShopProduct;
 use App\Models\Data\DataLocalisation;
 use Illuminate\Http\Request;
 
@@ -71,9 +76,38 @@ class ShopCategoryController extends Controller
     }
 
     //Получаем данные записи
-    public function show(string $id)
+    public function show(int $id): object
     {
-        //
+
+        $dataPage = BaseShopCategory::find($id);
+        $pagination = BaseShopCategoryProduct::where('category_id', $id)
+            ->where('status', 1)
+            ->orderBy('id', 'desc')
+            ->paginate(16);
+
+        $productList = [];
+        foreach ($pagination as $item) {
+            $productList[] = BaseShopProduct::find($item->post_id);
+        }
+
+        $page = (object)[];
+        $page->meta = MetaSeo::pageSeo($this->pageType, $dataPage);
+        $page->content = MetaContent::pageContent($this->pageType, $dataPage);
+        $page->pagination = $pagination;
+        $page->listProducts = (new DataOtherController())->formatProductCategory($productList);
+
+        return $page;
+    }
+
+    //Формируем хлебные крошки
+    private function breadcrumbShopCategory(int $idCategory): array
+    {
+        $category = BaseShopCategory::find($idCategory);
+        $parent = [];
+        if ($category->parent_id != 0) {
+            $parent = BaseShopCategory::find($category->id);
+        }
+        return [];
     }
 
     //Получаем данные для редактирования записи

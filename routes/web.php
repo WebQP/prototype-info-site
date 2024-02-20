@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\BaseNavigationController;
+use App\Http\Controllers\Content\Shop\ShopCartController;
+use App\Services\Localization\LocalizationService;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,11 +16,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+//Корзина
+Route::post('shop-cart/add', [ShopCartController::class,'addProductToCart']);
+Route::post('shop-cart/plus', [ShopCartController::class,'plusProductToCart']);
+Route::post('shop-cart/minus', [ShopCartController::class,'minusProductToCart']);
+Route::post('shop-cart/remove', [ShopCartController::class,'removeProductToCart']);
+Route::get('shop-cart/list', [ShopCartController::class,'cartList']);
+Route::get('cart', [BaseNavigationController::class,'cart']);
 
 Route::get('/manager/{any}', function () {
     return view('control-panel.app');
 })->where('any', '.*');
 
-Route::get('/', [BaseNavigationController::class, 'index']);
-Route::get('/{slag}', [BaseNavigationController::class, 'route']);
+Route::group(
+    [
+        'prefix' => LocalizationService::locale(),
+        'middleware' => 'setLocale'
+    ],
+    function () {
+        Route::get('/', [BaseNavigationController::class, 'index']);
+        Route::get('/{slag}', [BaseNavigationController::class, 'route']);
+    }
+);

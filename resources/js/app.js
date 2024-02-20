@@ -7,9 +7,9 @@ import axios from 'axios'
 import router from './router'
 import Vuelidate from "@vuelidate/core";
 
-import AlertError from "./components/assets/AlertError.vue";
-import Preloader from "./components/assets/Preloader.vue";
-import FormEditor from "./components/assets/form/FormEditor.vue"; //Визуальный редактор
+import AlertError from "./components/panel/assets/AlertError.vue";
+import Preloader from "./components/panel/assets/Preloader.vue";
+import FormEditor from "./components/panel/assets/form/FormEditor.vue"; //Визуальный редактор
 
 const app = createApp(App,App);
 app.config.globalProperties.$axios = axios;

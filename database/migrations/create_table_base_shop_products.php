@@ -25,6 +25,8 @@ return new class extends Migration
             $table->decimal('price', 10)->default(0)->comment('Цена');
             $table->decimal('price_old', 10)->default(0)->comment('Цена старая');
             $table->unsignedInteger('brand_id')->default(0)->comment('ID бренда');
+            $table->tinyInteger('specials')->default(0)->comment('Специальное предложение');
+            $table->tinyInteger('recommended')->default(0)->comment('Рекомендуемый товар');
             $table->timestamps();
         });
     }

@@ -6,5 +6,6 @@ mix.js('resources/js/app.js', 'public/assets/site/js')
 mix
     .js('resources/js/plugins/admin.js', 'public/assets/admin/js')
     .js('resources/js/app.js', 'public/assets/admin/js')
+    .js('resources/js/site.js', 'public/assets/site/js')
     .vue()
     .sass('resources/scss/admin/app.scss', 'public/assets/admin/css')

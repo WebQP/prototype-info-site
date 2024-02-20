@@ -8,6 +8,7 @@ use App\Models\Base\Blog\Categories\BaseBlogCategoryPost;
 use App\Models\Base\Blog\Posts\BaseBlogPost;
 use App\Models\Base\Blog\Posts\BaseBlogPostLocalisation;
 use App\Models\Base\Pages\BasePageLocalisation;
+use App\Models\Base\Shop\BaseShopProduct;
 use App\Models\Data\DataLocalisation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -137,6 +138,22 @@ class BlogPostController extends Controller
     public function show(string $id)
     {
         //
+    }
+
+    public function listNews(int $limit)
+    {
+        $getList = BaseBlogPost::where('status', 1)->orderBy('id')->limit($limit)->get();
+        $list = [];
+        foreach ($getList as $item) {
+            $list[] = [
+                'id' => $item->id,
+                'slug' => '/' . $item->slug,
+                'name' => $item->name,
+                'image' => $item->preview_image,
+                'date' => Carbon::parse($item->created_at)->format('d.m.Y')
+            ];
+        }
+        return $list;
     }
 
     public function edit(int $id, Request $request)

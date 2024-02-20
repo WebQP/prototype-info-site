@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers\Content;
 
+use App\Facades\MetaContentFacade as MetaContent;
+use App\Facades\MetaSeoFacade as MetaSeo;
+use App\Http\Controllers\Content\Blog\BlogPostController;
+use App\Http\Controllers\Content\Shop\ShopBrandController;
+use App\Http\Controllers\Content\Shop\ShopProductController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\DataOtherController;
 use App\Models\Base\BaseNavigation;
 use App\Models\Base\Pages\BasePage;
 use App\Models\Base\Pages\BasePageLocalisation;
@@ -73,26 +79,30 @@ class PageController extends Controller
     }
 
     //Получаем данные записи
-    public function show(string $id): array
+    public function show(string $id): object
     {
+        $dataPage = BasePage::find($id);
         $listSlider = [];
-        $page = BasePage::find($id);
+
+        $page = (object)[];
+        $page->meta = MetaSeo::pageSeo($this->pageType, $dataPage);
+        $page->content = MetaContent::pageContent($this->pageType, $dataPage);
 
         if ($id == 1) {
             $getMainSlider = BasePageMainSlider::get();
             foreach ($getMainSlider as $item) {
                 $listSlider[] = $item->url;
             }
+            $page->listSlider = $listSlider;
+            $page->listProductNew =  (new ShopProductController())->productsNew(8);
+            $page->listProductTop = (new ShopProductController())->productsTop(8);
+            $page->listProductSpecials =  (new ShopProductController())->productsSpecials(8);
+            $page->listProductRecommended = (new ShopProductController())->productsRecommended(8);
+            $page->listBrand = (new ShopBrandController())->brandList(6);
+            $page->listNews = (new BlogPostController())->listNews(5);
         }
-        return [
-            'id' => $page->id,
-            'name' =>  $page->name,
-            'title' =>  $page->title,
-            'description' =>  $page->description,
-            'contents' => $page->contents,
-            'previewImage' => $page->preview_image,
-            'listSlider' => $listSlider,
-        ];
+
+        return $page;
     }
 
     //Получаем данные для редактирования записи

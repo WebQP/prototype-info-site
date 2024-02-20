@@ -80,12 +80,7 @@
                         <!-- Корзина -->
                         <div class="header-cart">
                             <div id="cart" class="btn-group btn-block">
-                                <span class="cart_heading" data-toggle="dropdown">Корзина</span>
-                                <ul class="dropdown-menu pull-right cart-menu">
-                                    <li>
-                                        <p class="text-center">Ваша корзина пуста!</p>
-                                    </li>
-                                </ul>
+                                <a href="/cart" class="cart_heading">Корзина</a>
                             </div>
                         </div>
                         <!-- Корзина -->
@@ -116,10 +111,9 @@
                             <div class="nav-inner">
                                 <div id="menu" class="main-menu">
                                     <ul class="nav navbar-nav">
-                                        <li class="top_level"><a href="#">О компании</a></li>
-                                        <li class="top_level"><a href="#">Доставка и оплата</a></li>
-                                        <li class="top_level"><a href="#">FAQ</a></li>
-                                        <li class="top_level"><a href="/contacts">Контакты</a></li>
+                                        <li class="top_level"><a href="/about-the-company">Despre companie</a></li>
+                                        <li class="top_level"><a href="/livrarea-i-achitarea">Livrarea şi achitarea</a></li>
+                                        <li class="top_level"><a href="/contacts">Contacte</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -145,23 +139,23 @@
                                         </ul>
                                         <ul>
                                             <li>
-                                                <a href="https://codezeel.com/opencart/OPC01/OPC010010/index.php?route=product/category&amp;path=20_26">Accessories</a>
+                                                <a href="#">Accessories</a>
                                                 <ul class="list-unstyled childs_2">
-                                                    <li><a href="https://codezeel.com/opencart/OPC01/OPC010010/index.php?route=product/category&amp;path=20_26_53">Luggage &amp; Travel</a></li>
-                                                    <li><a href="https://codezeel.com/opencart/OPC01/OPC010010/index.php?route=product/category&amp;path=20_26_54">Wallets &amp; Belts</a></li>
-                                                    <li><a href="https://codezeel.com/opencart/OPC01/OPC010010/index.php?route=product/category&amp;path=20_26_55">Handbags</a></li>
-                                                    <li><a href="https://codezeel.com/opencart/OPC01/OPC010010/index.php?route=product/category&amp;path=20_26_56">Printed Sarees</a></li>
+                                                    <li><a href="#">Luggage &amp; Travel</a></li>
+                                                    <li><a href="#">Wallets &amp; Belts</a></li>
+                                                    <li><a href="#">Handbags</a></li>
+                                                    <li><a href="#">Printed Sarees</a></li>
                                                 </ul>
                                             </li>
                                         </ul>
                                         <ul>
                                             <li>
-                                                <a href="https://codezeel.com/opencart/OPC01/OPC010010/index.php?route=product/category&amp;path=20_43">Footwear</a>
+                                                <a href="#">Footwear</a>
                                                 <ul class="list-unstyled childs_2">
-                                                    <li><a href="https://codezeel.com/opencart/OPC01/OPC010010/index.php?route=product/category&amp;path=20_43_38">Formal Shoes</a></li>
-                                                    <li><a href="https://codezeel.com/opencart/OPC01/OPC010010/index.php?route=product/category&amp;path=20_43_37">Flip-Flops</a></li>
-                                                    <li><a href="https://codezeel.com/opencart/OPC01/OPC010010/index.php?route=product/category&amp;path=20_43_39">Sandles</a></li>
-                                                    <li><a href="https://codezeel.com/opencart/OPC01/OPC010010/index.php?route=product/category&amp;path=20_43_40">Sports Shoes</a></li>
+                                                    <li><a href="#">Formal Shoes</a></li>
+                                                    <li><a href="#">Flip-Flops</a></li>
+                                                    <li><a href="#">Sandles</a></li>
+                                                    <li><a href="#">Sports Shoes</a></li>
                                                 </ul>
                                             </li>
                                         </ul>

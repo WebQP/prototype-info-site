@@ -4,6 +4,7 @@ use App\Http\Controllers\Content\Blog\BlogCategoryController;
 use App\Http\Controllers\Content\Blog\BlogPostController;
 use App\Http\Controllers\Content\PageController;
 use App\Http\Controllers\Content\Shop\ShopBrandController;
+use App\Http\Controllers\Content\Shop\ShopCartController;
 use App\Http\Controllers\Content\Shop\ShopCategoryController;
 use App\Http\Controllers\Content\Shop\ShopProductController;
 use App\Http\Controllers\UploadingFilesController;

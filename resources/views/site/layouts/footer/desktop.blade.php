@@ -11,22 +11,17 @@
                 <div class="col-sm-3 column">
                     <h5>Информация</h5>
                     <ul class="list-unstyled">
-                        <li class="top_level"><a href="#">О компании</a></li>
-                        <li class="top_level"><a href="#">Доставка и оплата</a></li>
-                        <li class="top_level"><a href="#">Положения и условия</a></li>
-                        <li class="top_level"><a href="#">Вакансии</a></li>
-                        <li class="top_level"><a href="#">FAQ</a></li>
-                        <li class="top_level"><a href="#">Карта сайта</a></li>
+                        <li class="top_level"><a href="/about-the-company">Despre companie</a></li>
+                        <li class="top_level"><a href="/livrarea-i-achitarea">Livrarea şi achitarea</a></li>
+                        <li class="top_level"><a href="/terms-and-conditions">Termeni și condiții</a></li>
+                        <li class="top_level"><a href="/vacancies">Posturi vacante</a></li>
+                        <li class="top_level"><a href="/sitemap">Harta Site-ului</a></li>
                     </ul>
                 </div>
 
                 <div id="extra-link" class="col-sm-3 column">
                     <h5>Дополнительные услуги</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#">Ссылка</a></li>
-                        <li><a href="#">Ссылка</a></li>
-                        <li><a href="#">Ссылка</a></li>
-                        <li><a href="#">Ссылка</a></li>
                         <li><a href="#">Ссылка</a></li>
                     </ul>
                 </div>
@@ -35,10 +30,6 @@
                 <div class="col-sm-3 column">
                     <h5>Аккаунт</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#">Ссылка</a></li>
-                        <li><a href="#">Ссылка</a></li>
-                        <li><a href="#">Ссылка</a></li>
-                        <li><a href="#">Ссылка</a></li>
                         <li><a href="#">Ссылка</a></li>
                     </ul>
                 </div>

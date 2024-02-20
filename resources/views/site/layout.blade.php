@@ -7,7 +7,7 @@
     <title>Medical Store</title>
     <meta name="description" content="Medical Store Opencart Responsive Theme is designed for Ayurveda, Medicine, Drug, Hospital, Fitness, Natural, Herbal, Health and multi purpose store. It is looking good with colors combination. It is very nice with its clean and professional look." />
     <meta name="keywords" content="Ayurveda, Medicine, Drug, Hospital, Fitness, Natural, Herbal, Health" />
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="{{asset('new/js/jquery-2.1.1.min.js')}}" type="text/javascript"></script>
     <script src="{{asset('new/js/bootstrap.min.js')}}" type="text/javascript"></script>
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700,900' rel='stylesheet' type='text/css'>
@@ -29,7 +29,6 @@
     <script src="{{asset('new/js/swiper.jquery.js')}}" type="text/javascript"></script>
 
     <link href="https://codezeel.com/opencart/OPC01/OPC010010/image/catalog/cart.png" rel="icon" />
-    <!-- Codezeel - Start -->
     <script type="text/javascript" src="{{asset('new/js/custom.js')}}"></script>
     <script type="text/javascript" src="{{asset('new/js/jstree.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('new/js/carousel.min.js')}}"></script>
@@ -44,11 +43,9 @@
     <script type="text/javascript" src="{{asset('new/js/owl.carousel.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('new/js/jquery.cookie.js')}}"></script>
     <script type="text/javascript" src="{{asset('new/js/jquery.magnific-popup.min.js')}}"></script>
-    <!-- Codezeel - End -->
 
     <script src="{{asset('new/js/common.js')}}" type="text/javascript"></script>
 </head>
-
 
 @if (Auth::check())
     <!--Авторизован-->
@@ -76,21 +73,18 @@
 @yield('content')
 
 @desktop
-@include('site.layouts.footer.desktop')
+    @include('site.layouts.footer.desktop')
 @elsedesktop
-@include('site.layouts.footer.mobile')
+    @include('site.layouts.footer.mobile')
 @enddesktop
 
-<script type="text/javascript">
-    $(document).ready(function(){
-        $('#testimonial-carousel').owlCarousel({
-            singleItem: true,
-            navigation: false,
-            pagination: true,
-            autoPlay: true
-        });
-    });
-</script>
+@include('site.layouts.alerts.add-to-cart-good')
 
+<script type="text/javascript" src="{{asset('new/js/main.js')}}"></script>
+<script type="text/javascript" src="{{asset('assets/site/js/cart.js')}}"></script>
+
+<script>
+
+</script>
 </body>
 </html>

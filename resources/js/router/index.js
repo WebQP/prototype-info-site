@@ -1,22 +1,22 @@
 import {createWebHistory, createRouter} from "vue-router";
 
 //Страницы
-import PagesList from "../components/pages/PagesList.vue";
-import PagesCreateOrUpdate from "../components/pages/PagesCreateOrUpdate.vue";
+import PagesList from "../components/panel/pages/PagesList.vue";
+import PagesCreateOrUpdate from "../components/panel/pages/PagesCreateOrUpdate.vue";
 
 //Блог
-import BlogCategoriesList from "../components/blog/categories/BlogCategoriesList.vue";
-import BlogCategoriesCreateOrUpdate from "../components/blog/categories/BlogCategoriesCreateOrUpdate.vue";
-import BlogPostsList from "../components/blog/posts/BlogPostsList.vue";
-import BlogPostsCreateOrUpdate from "../components/blog/posts/BlogPostsCreateOrUpdate.vue";
+import BlogCategoriesList from "../components/panel/blog/categories/BlogCategoriesList.vue";
+import BlogCategoriesCreateOrUpdate from "../components/panel/blog/categories/BlogCategoriesCreateOrUpdate.vue";
+import BlogPostsList from "../components/panel/blog/posts/BlogPostsList.vue";
+import BlogPostsCreateOrUpdate from "../components/panel/blog/posts/BlogPostsCreateOrUpdate.vue";
 
 //Магазин
-import ShopCategoriesList from "../components/shop/categories/ShopCategoriesList.vue";
-import ShopCategoriesCreateOrUpdate from "../components/shop/categories/ShopCategoriesCreateOrUpdate.vue";
-import ShopProductsList from "../components/shop/products/ShopProductsList.vue";
-import ShopProductsCreateOrUpdate from "../components/shop/products/ShopProductsCreateOrUpdate.vue";
-import ShopBrandsList from "../components/shop/brands/ShopBrandsList.vue";
-import ShopBrandsCreateOrUpdate from "../components/shop/brands/ShopBrandsCreateOrUpdate.vue";
+import ShopCategoriesList from "../components/panel/shop/categories/ShopCategoriesList.vue";
+import ShopCategoriesCreateOrUpdate from "../components/panel/shop/categories/ShopCategoriesCreateOrUpdate.vue";
+import ShopProductsList from "../components/panel/shop/products/ShopProductsList.vue";
+import ShopProductsCreateOrUpdate from "../components/panel/shop/products/ShopProductsCreateOrUpdate.vue";
+import ShopBrandsList from "../components/panel/shop/brands/ShopBrandsList.vue";
+import ShopBrandsCreateOrUpdate from "../components/panel/shop/brands/ShopBrandsCreateOrUpdate.vue";
 
 export const routes = [
     //Страницы

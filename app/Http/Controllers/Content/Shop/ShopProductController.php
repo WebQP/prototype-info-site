@@ -3,17 +3,21 @@
 namespace App\Http\Controllers\Content\Shop;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\DataOtherController;
+use App\Http\Controllers\MetaController;
 use App\Models\Base\BaseNavigation;
 use App\Models\Base\Shop\BaseShopCategoryProduct;
 use App\Models\Base\Shop\BaseShopProduct;
 use App\Models\Base\Shop\BaseShopProductLocalisation;
 use App\Models\Data\DataLocalisation;
+use App\Facades\NavigationFacade;
+use App\Facades\MetaSeoFacade as MetaSeo;
+use App\Facades\MetaContentFacade as MetaContent;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ShopProductController extends Controller
 {
-
     public function __construct()
     {
         $this->pageType = 5;
@@ -51,7 +55,7 @@ class ShopProductController extends Controller
     //Добавление записи
     public function store(Request $request)
     {
-        $slug = $this->generationUrl($request->pageName);
+        $slug = NavigationFacade::generationUrl($request->pageName);
 
         $postPage = new BaseShopProduct();
         $postPage->status = $request->pageStatus;
@@ -65,27 +69,100 @@ class ShopProductController extends Controller
         $postPage->price = trim($request->pagePrice);
         $postPage->price_old = trim($request->pagePriceOld);
         $postPage->brand_id = trim($request->pageBrandId);
+        $postPage->specials = trim($request->pageSpecials);
+        $postPage->recommended = trim($request->pageRecommended);
         $postPage->save();
 
+        NavigationFacade::addNavigation($slug, $postPage->id, $this->pageType, $request->pageStatus);
 
-        $this->addNavigation($slug, $postPage->id, $this->pageType, $request->pageStatus);
         $this->addLinkShopCategoryProduct($postPage->id, $request->pageStatus, $request->pageCategories);
 
         return ['id' => $postPage->id];
     }
 
     //Получаем данные записи
-    public function show(string $id): array
+    public function show(int $id): object
     {
-        $page = BaseShopProduct::find($id);
+        $dataPage = BaseShopProduct::find($id);
+
+        $page = (object)[];
+        $page->meta = MetaSeo::pageSeo($this->pageType, $dataPage);
+        $page->content = MetaContent::pageContent($this->pageType, $dataPage);
+        $page->brand = (new ShopBrandController())->show($dataPage->brand_id);
+        $page->relatedProducts = (new ShopProductController())->productsNew(8);
+
+        return $page;
+    }
+
+    //Выборка новых товаров
+    public function productsNew(int $limit): array
+    {
+        $getList = BaseShopProduct::where('status', 1)->orderBy('id')->limit($limit)->get();
+        $list = [];
+        foreach ($getList as $item) {
+            $list[] = $this->showInListFormat($item);
+        }
+        return $list;
+    }
+
+    //Выборка популярных товаров
+    public function productsTop(int $limit): array
+    {
+        $getList = BaseShopProduct::where('status', 1)->orderBy('views')->limit($limit)->get();
+        $list = [];
+        foreach ($getList as $item) {
+            $list[] = $this->showInListFormat($item);
+        }
+        return $list;
+    }
+
+    //Выборка специальных предложений товаров
+    public function productsSpecials(int $limit): array
+    {
+        $getList = BaseShopProduct::where('status', 1)
+            ->where('specials', 1)
+            ->limit($limit)
+            ->get();
+        $list = [];
+        foreach ($getList as $item) {
+            $list[] = $this->showInListFormat($item);
+        }
+        return $list;
+    }
+
+    //Выборка специальных предложений товаров
+    public function productsRecommended(int $limit): array
+    {
+        $getList = BaseShopProduct::where('status', 1)
+            ->where('recommended', 1)
+            ->limit($limit)
+            ->get();
+        $list = [];
+        foreach ($getList as $item) {
+            $list[] = $this->showInListFormat($item);
+        }
+        return $list;
+    }
+
+    //Форматируем товар для листинга
+    private function showInListFormat(object $data): array
+    {
+        $images = unserialize($data['image_list']);
+        $imageProductOne = '';
+        $imageProductTwo = '';
+        if (count($images) > 0) {
+            $imageProductOne = $images[0]['url'];
+            $imageProductTwo = $images[1]['url'];
+        }
 
         return [
-            'id' => $page->id,
-            'name' =>  $page->name,
-            'title' =>  $page->title,
-            'description' =>  $page->description,
-            'contents' => $page->contents,
-            'previewImage' => $page->preview_image,
+            'id' => $data->id,
+            'slug' => '/' . $data->slug,
+            'name' => $data->name,
+            'price' => $data->price,
+            'price_old' => $data->price_old,
+            'image_1' => $imageProductOne,
+            'image_2' => $imageProductTwo,
         ];
     }
 
@@ -122,14 +199,16 @@ class ShopProductController extends Controller
             'pageStatus' => $page->status ?? $pageMainLang->status,          //Статус записи
             'pageSlug' => isset($page->slug) ? '/' . $page->slug : $pageMainLang->slug,           //Ссылка на страницу
             'pageName' => $page->name ?? '',           //Название страницы
-            'pageContent' => $page->contents ?? '',        //Контент страницы
+            'pageContent' => $page->contents ?? '',    //Контент страницы
             'pageTitle' => $page->title ?? '',          //Title страницы
             'pageDescription' => $page->description ?? '',    //Description страницы
             'pageImageList' => isset($page->image_list) ? unserialize($page->image_list) : unserialize($pageMainLang->image_list),      //Фото товаров
             'pageProductCode' => $page->unique_code ?? '',    //Артикул
             'pagePrice' => $page->price ?? 0,           //Цена товара
-            'pagePriceOld' => $page->price_old ?? 0,        //Старая цена товара
+            'pagePriceOld' => $page->price_old ?? 0,       //Старая цена товара
             'pageBrandId' => $page->brand_id ?? 1,         //ID производителя
+            'pageSpecials' => $page->specials ?? 0,        //Специальное предложение
+            'pageRecommended' => $page->recommended ?? 0,  //Рекомендуемый товар
             'pageCategories' => $listCategories,     //Категории товара
             'listLanguages' => $languages, //Список языков
         ];
@@ -152,6 +231,8 @@ class ShopProductController extends Controller
             $postPage->price = trim($request->pagePrice);
             $postPage->price_old = trim($request->pagePriceOld);
             $postPage->brand_id = trim($request->pageBrandId);
+            $postPage->specials = trim($request->pageSpecials);
+            $postPage->recommended = trim($request->pageRecommended);
             $postPage->save();
 
             //Добавляем связи категорий
@@ -292,53 +373,7 @@ class ShopProductController extends Controller
         ];
     }
 
-    //Добавляем запись в навигацию
-    private function addNavigation(string $slug, int $pageId, int $pageType, int $pageStatus = 1): void
-    {
-        $post = new BaseNavigation();
-        $post->status = $pageStatus;
-        $post->slug = $slug;
-        $post->page_id = $pageId;
-        $post->page_type = $pageType;
-        $post->save();
-    }
 
-    //Генерируем уникальный URL для страницы
-    private function generationUrl(string $name): string
-    {
-        $converter = [
-            'а' => 'a', 'б' => 'b', 'в' => 'v', 'г' => 'g', 'д' => 'd',
-            'е' => 'e', 'ё' => 'e', 'ж' => 'zh', 'з' => 'z', 'и' => 'i',
-            'й' => 'y', 'к' => 'k', 'л' => 'l', 'м' => 'm', 'н' => 'n',
-            'о' => 'o', 'п' => 'p', 'р' => 'r', 'с' => 's', 'т' => 't',
-            'у' => 'u', 'ф' => 'f', 'х' => 'h', 'ц' => 'c', 'ч' => 'ch',
-            'ш' => 'sh', 'щ' => 'sch', 'ь' => '', 'ы' => 'y', 'ъ' => '',
-            'э' => 'e', 'ю' => 'yu', 'я' => 'ya',
-        ];
-
-        $slug = mb_strtolower(trim($name));
-        $slug = strtr($slug, $converter);
-        $slug = mb_ereg_replace('[^-0-9a-z\.]', '-', $slug);
-        $slug = mb_ereg_replace('[-]+', '-', $slug);
-        $slug = str_replace('--', '-', $slug);
-        $slug = trim($slug, '-');
-
-        $uniqueSlug = false;
-        $iteration = 1;
-        $slugPage = $slug;
-
-        while (!$uniqueSlug) {
-            $getItem = BaseNavigation::where('slug', $slugPage)->first();
-            if (isset($getItem->id)) {
-                $iteration++;
-                $slugPage = $slug . '-' . $iteration;
-            } else {
-                $uniqueSlug = true;
-            }
-        }
-
-        return $slugPage;
-    }
 
     //Связывание категорий с товарами
     private function addLinkShopCategoryProduct(int $id, int $status, array $categories): void

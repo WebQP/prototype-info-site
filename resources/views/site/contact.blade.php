@@ -5,8 +5,13 @@
         <div class="container">
             <ul class="breadcrumb">
                 <li>
-                    <a href="/">
+                    <a href="#">
                         <i class="fa fa-home"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="/contacts">
+                        Contacts
                     </a>
                 </li>
             </ul>
@@ -17,9 +22,9 @@
         <div id="product-category" class="container">
             <div class="row">
 
-                <!-- Сайдбар -->
-                @include('site.layouts.sidebar.sidebar-page')
-                <!-- Сайдбар -->
+                <!-- СайдБар -->
+                @include('site.layouts.sidebar.sidebar-home')
+                <!-- СайдБар -->
 
                 <!-- Контент -->
                 <div id="content" class="col-sm-9">

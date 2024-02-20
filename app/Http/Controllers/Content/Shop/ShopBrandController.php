@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Content\Shop;
 
+use App\Facades\MetaContentFacade as MetaContent;
+use App\Facades\MetaSeoFacade as MetaSeo;
 use App\Http\Controllers\Controller;
 use App\Models\Base\BaseNavigation;
 use App\Models\Base\Pages\BasePage;
@@ -76,20 +78,32 @@ class ShopBrandController extends Controller
     }
 
     //Получаем данные записи
-    public function show(string $id): array
+    public function show(string $id): object
     {
-        $listSlider = [];
-        $page = BaseShopBrand::find($id);
+        $dataPage = BaseShopBrand::find($id);
 
-        return [
-            'id' => $page->id,
-            'name' =>  $page->name,
-            'title' =>  $page->title,
-            'description' =>  $page->description,
-            'contents' => $page->contents,
-            'previewImage' => $page->preview_image,
-            'listSlider' => $listSlider,
-        ];
+        $page = (object)[];
+        $page->meta = MetaSeo::pageSeo($this->pageType, $dataPage);
+        $page->content = MetaContent::pageContent($this->pageType, $dataPage);
+
+        return $page;
+    }
+
+    public function brandList(int $limit)
+    {
+        $getList = BaseShopBrand::where('status', 1)->orderBy('id')->limit($limit)->get();
+        $list = [];
+        foreach ($getList as $item) {
+            if ($item->id != 1) {
+                $list[] = [
+                'id' => $item->id,
+                'slug' => '/' . $item->slug,
+                'name' => $item->name,
+                'image' => $item->preview_image,
+                ];
+            }
+        }
+        return $list;
     }
 
     //Получаем данные для редактирования записи
